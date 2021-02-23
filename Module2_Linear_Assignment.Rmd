@@ -1,7 +1,7 @@
 ---
 title: "Module 2 Assignment on Linear Regression - 2 - V1"
-author: "First Name + Last Name // Undergraduate/Graduate Student"
-date: "Today's date"
+author: "Francisco Ambrosini // Undergraduate"
+date: "2/22/2021"
 #output: pdf_document
 output:
   pdf_document: default
@@ -10,7 +10,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, tidy=TRUE, tidy.opts=list(width.cutoff=80))
+#knitr::opts_chunk$set(echo = TRUE, tidy=TRUE, tidy.opts=list(width.cutoff=80))
 ```
 
 ***
@@ -47,20 +47,30 @@ In `Module 1 Assignment`, `Q2`, you fitted `Model 3` with `mpg` as the response 
 
 a. Using `OLS`, fit the model with all predictors on `mpg`. Report the predictors'  coefficient estimates, $R_{adj}$, and $MSE$. Note: The method in `lm()` is called ordinary least squares (OLS).
 
+Predictors' coefficient estimates found in regression summary below.
+R(adj) --> 0.8063
+MSE --> 
+
 ```{r eval=FALSE, echo=TRUE, results='hide'}
 #This is setup to start
 library(ISLR)
 Model_3 = mpg ~ horsepower+year+cylinders+displacement+weight+acceleration
 Model_3.fit = lm(Model_3, data=Auto)
 summary(Model_3.fit)
-# Or, prefer this restructuring way
-# by excluding categorical variables:
-# Make sure AutoNum is a data.frame
-AutoNum = Auto[, !(colnames(Auto) %in% c("origin", "name"))]
-Model_Full = mpg ~ . #you can write models in this way to call later
-Model_Full.fit = lm(Model_Full, data=AutoNum)
-summary(Model_Full.fit)
+
+train.mat=model.matrix(mpg ~., data=Auto)
+
+train.mat=model.matrix(Salary~., data=Hitters[train,])
+dim(train.mat) #209  20
+
+train.errors=rep(NA,19)
+for(i in 1:19){
+  coefi=coef(regfit.best,id=i)
+  yhat=train.mat[,names(coefi)]%*%coefi
+  train.errors[i]=mean((Hitters$Salary[train]-yhat)^2) #this gets train MSE
+}
 ```
+
 
 
 b. Using `forward selection method` from `regsubsets()` and `method="forward"`, fit MLR models and select the `best` subset of predictors. Report the best model obtained from the default setting by including the predictors' coefficient estimates, $R_{adj}$, and $MSE$.
