@@ -99,9 +99,35 @@ train.errors[6] #model with highest adjusted R^2 has lowest MSE 10.86625
 
 c. What criterion had been employed to find the best subset? What other criteria exist? Explain.
 
+When choosing the forward method, the algorithm automatically chooses the model with 1 variable that has the highest R squared (adjusted R squared would give the same result because we are comparing models with the same number of predictors), then we choose the model with two variables which includes the chosen variable from the first step. The same is done for the third, including the two previous variables, and so forth. There is also the backward method, in which we start with the full model and we remove one variable at a time.
+
 d. Using `backward selection method` from `regsubsets()` and `method="backward"`, fit MLR models and select the `best` subset of predictors. Report the best model obtained from the default setting by including predictors, their coefficient estimates, $R_{adj}$, and $MSE$.
 
+```{r echo=TRUE, eval=FALSE}
+# helpful code from the r lab: review it
+library(leaps)
+Model_Full2 = mpg ~ horsepower+year+cylinders+displacement+weight+acceleration+origin
+regfit.m2=regsubsets(Model_Full2, data=Auto, nbest=1, 
+                     nvmax=6, method="backward")
+reg.summary1=summary(regfit.m2)
+reg.summary1
+names(reg.summary1)
+reg.summary1$adjr2[6] #best model adjusted R squared 0.8183822
+coef(regfit.m2, 6) #best model coefficients
+
+train.mat1=model.matrix(mpg~horsepower+year+cylinders+displacement+weight+acceleration+origin, data=Auto)
+train.errors1=rep(NA,6)
+for(i in 1:6){
+  coefi=coef(regfit.m2,id=i)
+  yhat1=train.mat[,names(coefi)]%*%coefi
+  train.errors1[i]=mean((Auto$mpg-yhat1)^2) #this gets train MSE
+}
+train.errors1[6] #model with highest adjusted R^2 has lowest MSE 10.86625
+```
+
 e. Compare the results obtained from `OLS`, `forward` and `backward` selection methods (parts a, b and d): What changed? Which one(s) is better? Comment and justify.
+
+For parts b and d I obtained the same result as best model, which is not uncommon because the algorithms employed are very similar. The OLS method underperformed in terms of adjusted R squared and MSE when compared to the forward and backward method best model, which provides me with experience that employing these tools can lead to achieving better results when performing statistical analysis in the future.
 
 
 ## Q2) (*Cross-Validated with k-Fold*) 
