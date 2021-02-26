@@ -56,18 +56,18 @@ MSE -->
 library(ISLR)
 Model_3 = mpg ~ horsepower+year+cylinders+displacement+weight+acceleration
 Model_3.fit = lm(Model_3, data=Auto)
+
+train.mat=model.matrix(mpg ~ horsepower+year+cylinders+displacement+weight+acceleration, data=Auto)
+#train.mat=model.matrix(Salary~., data=Hitters[train,])
+
+#dim(train.mat) #392  7
+
+coefi=coef(Model_3.fit,id=i)
+yhat=train.mat[,names(coefi)]%*%coefi
+train.error=mean((Auto$mpg-yhat)^2)
+train.error #MSE 11.59017
+adj_r2 = summary(Model_3.fit)$adj.r.squared
 summary(Model_3.fit)
-
-train.mat=model.matrix(mpg ~., data=Auto)
-
-train.mat=model.matrix(Salary~., data=Hitters[train,])
-dim(train.mat) #209  20
-
-train.errors=rep(NA,19)
-for(i in 1:19){
-  coefi=coef(regfit.best,id=i)
-  yhat=train.mat[,names(coefi)]%*%coefi
-  train.errors[i]=mean((Hitters$Salary[train]-yhat)^2) #this gets train MSE
 }
 ```
 
@@ -77,14 +77,24 @@ b. Using `forward selection method` from `regsubsets()` and `method="forward"`, 
 
 ```{r echo=TRUE, eval=FALSE}
 # helpful code from the r lab: review it
-Model_Full = mpg ~ .
-regfit.m1=regsubsets(Model_Full, data=AutoNum, nbest=1, 
+library(leaps)
+Model_Full = mpg ~ horsepower+year+cylinders+displacement+weight+acceleration+origin
+regfit.m1=regsubsets(Model_Full, data=Auto, nbest=1, 
                      nvmax=6, method="forward")
 reg.summary=summary(regfit.m1)
 reg.summary
 names(reg.summary)
-reg.summary$adjr2
-coef(regfit.m2, 1:6) #coefficients of all models built
+reg.summary$adjr2[6] #best model adjusted R squared 0.8183822
+coef(regfit.m1, 6) #best model coefficients
+
+train.mat=model.matrix(mpg~horsepower+year+cylinders+displacement+weight+acceleration+origin, data=Auto)
+train.errors=rep(NA,6)
+for(i in 1:6){
+  coefi=coef(regfit.m1,id=i)
+  yhat=train.mat[,names(coefi)]%*%coefi
+  train.errors[i]=mean((Auto$mpg-yhat)^2) #this gets train MSE
+}
+train.errors[6] #model with highest adjusted R^2 has lowest MSE 10.86625
 ```
 
 c. What criterion had been employed to find the best subset? What other criteria exist? Explain.
