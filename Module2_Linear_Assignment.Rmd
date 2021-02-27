@@ -58,9 +58,6 @@ Model_3 = mpg ~ horsepower+year+cylinders+displacement+weight+acceleration
 Model_3.fit = lm(Model_3, data=Auto)
 
 train.mat=model.matrix(mpg ~ horsepower+year+cylinders+displacement+weight+acceleration, data=Auto)
-#train.mat=model.matrix(Salary~., data=Hitters[train,])
-
-#dim(train.mat) #392  7
 
 coefi=coef(Model_3.fit,id=i)
 yhat=train.mat[,names(coefi)]%*%coefi
@@ -136,15 +133,131 @@ What changes in model selection results and the coefficient estimates when cross
 
 a. Using the $5$-fold CV approach, fit the OLS MLR model on `mpg` including all the predictors. Report the all predictors' coefficient estimates, $MSE_{train}$, and $MSE_{test}$. 
 
+```{r echo=TRUE, eval=FALSE}
+k=5
+set.seed(12)
+
+#train MSE
+folds=sample(1:k,nrow(Auto),replace=TRUE)
+cv.errors=rep(NA,k)
+Model_4 = mpg ~ horsepower+year+cylinders+displacement+weight+acceleration
+for(j in 1:k){
+  Model_4.fit = lm(Model_4, data=Auto[folds!=j,])
+  pred=predict(Model_4.fit,Auto[folds!=j,])
+  cv.errors[j]=mean((Auto$mpg[folds!=j]-pred)^2)
+}
+mean(cv.errors) #average train MSE 11.55001
+
+#test MSE
+folds=sample(1:k,nrow(Auto),replace=TRUE)
+cv.errors=rep(NA,k)
+Model_4 = mpg ~ horsepower+year+cylinders+displacement+weight+acceleration
+for(j in 1:k){
+  Model_4.fit = lm(Model_4, data=Auto[folds!=j,])
+  pred=predict(Model_4.fit,Auto[folds==j,])
+  cv.errors[j]=mean((Auto$mpg[folds==j]-pred)^2)
+}
+mean(cv.errors) #average test MSE 12.26308
+summary(Model_4.fit)
+```
+
 b. Using the $5$-fold CV approach and `forward selection method`, fit MLR models on `mpg` and select the `best` subset of predictors. Report the best model obtained from the default setting by including the predictors' coefficient estimates, the averaged $MSE_{train}$, and the averaged $MSE_{test}$.
+
+```{r echo=TRUE, eval=FALSE}
+k=5
+set.seed(12)
+
+#train MSE
+folds=sample(1:k,nrow(Auto),replace=TRUE)
+cv.errors=matrix(NA,k,6, dimnames=list(NULL, paste(1:6)))
+Full_Model = mpg ~ horsepower+year+cylinders+displacement+weight+acceleration+origin
+for(j in 1:k){
+  regfit.m2=regsubsets(Full_Model, data=Auto[folds!=j,], nbest=1, 
+                     nvmax=6, method="forward")
+  train.mat1=model.matrix(mpg~horsepower+year+cylinders+displacement+weight+acceleration+origin, data=Auto[folds!=j,])
+  for(i in 1:6){
+    coefi=coef(regfit.m2,id=i)
+    yhat1=train.mat1[,names(coefi)]%*%coefi
+    cv.errors[j, i]=mean((Auto[folds!=j,]$mpg-yhat1)^2)
+  }
+}
+mean.cv.errors=apply(cv.errors,2,mean)
+mean.cv.errors #best model train MSE (p=6) 10.83093
+
+#test MSE
+cv.errors=matrix(NA,k,6, dimnames=list(NULL, paste(1:6)))
+Full_Model = mpg ~ horsepower+year+cylinders+displacement+weight+acceleration+origin
+for(j in 1:k){
+  regfit.m2=regsubsets(Full_Model, data=Auto[folds!=j,], nbest=1, 
+                     nvmax=6, method="forward")
+  train.mat1=model.matrix(mpg~horsepower+year+cylinders+displacement+weight+acceleration+origin, data=Auto[folds==j,])
+  for(i in 1:6){
+    coefi=coef(regfit.m2,id=i)
+    yhat1=train.mat1[,names(coefi)]%*%coefi
+    cv.errors[j, i]=mean((Auto[folds==j,]$mpg-yhat1)^2)
+  }
+}
+mean.cv.errors=apply(cv.errors,2,mean)
+mean.cv.errors #best model train MSE (p=3) 11.41013
+
+coef(regfit.m2, 3)
+
+```
 
 c. Compare the $MSE_{test}$'s. Explain.
 
+For the normal OLS with 5-fold CV, we obtained a test MSE of 12.26308, considerably higher than that obtained for the optimal model in 5-fold CV forward selection, which had a test MSE of 11.41013. This makes sense, since in the initial full model we are not even attempting to come up with a better model, which is exactly what is accomplished through the algorithm of forward selection, which arrives at an optimal number of predictors p=3.
+
 d. Using the $5$-fold CV approach and `backward selection method`, fit MLR models on `mpg` and select the `best` subset of predictors. Report the best model obtained from the default setting by including the predictors' coefficient estimates, the averaged $MSE_{train}$, $MSE_{test}$.
+
+```{r echo=TRUE, eval=FALSE}
+k=5
+set.seed(12)
+
+#train MSE
+folds=sample(1:k,nrow(Auto),replace=TRUE)
+cv.errors=matrix(NA,k,7, dimnames=list(NULL, paste(1:7)))
+Full_Model = mpg ~ horsepower+year+cylinders+displacement+weight+acceleration+origin
+for(j in 1:k){
+  regfit.m2=regsubsets(Full_Model, data=Auto[folds!=j,], nbest=1, 
+                     nvmax=7, method="backward")
+  train.mat1=model.matrix(mpg~horsepower+year+cylinders+displacement+weight+acceleration+origin, data=Auto[folds!=j,])
+  for(i in 1:7){
+    coefi=coef(regfit.m2,id=i)
+    yhat1=train.mat1[,names(coefi)]%*%coefi
+    cv.errors[j, i]=mean((Auto[folds!=j,]$mpg-yhat1)^2)
+  }
+}
+mean.cv.errors=apply(cv.errors,2,mean)
+mean.cv.errors #best model train MSE (p=7) 10.80047
+
+#test MSE
+cv.errors=matrix(NA,k,7, dimnames=list(NULL, paste(1:7)))
+Full_Model = mpg ~ horsepower+year+cylinders+displacement+weight+acceleration+origin
+for(j in 1:k){
+  regfit.m2=regsubsets(Full_Model, data=Auto[folds!=j,], nbest=1, 
+                     nvmax=7, method="backward")
+  train.mat1=model.matrix(mpg~horsepower+year+cylinders+displacement+weight+acceleration+origin, data=Auto[folds==j,])
+  for(i in 1:7){
+    coefi=coef(regfit.m2,id=i)
+    yhat1=train.mat1[,names(coefi)]%*%coefi
+    cv.errors[j, i]=mean((Auto[folds==j,]$mpg-yhat1)^2)
+  }
+}
+mean.cv.errors=apply(cv.errors,2,mean)
+mean.cv.errors #best model train MSE (p=6) 11.36236
+coef(regfit.m2, 6)
+
+
+```
 
 e. Did you come up with a different model on parts b and d? Are the predictors and their coefficient estimates same? Compare and explain.
 
+Yes, forward selection in part b determined that the model with p=3 was the optimal one, whereas backward selection in part d ended with p=6 for the optimal one. This helps realize the differences between the two approaches, because, although they help in speeding up the algorithm to find the optimal mode, however, it is not guaranteed that either model found the absolute optimal solution.
+
 f. Which fitted model is better among parts a, b, and d? Why? Justify. 
+
+If we take the test MSE as an estimate of test error, we would have to conclude that the model with p=3 determined by 5-fold CV backward selection is the best model, as it has the lowest test MSE estimate. This means that this model performs better than all the rest when testing the predictions obtained from said model.
 
 
 ## Q3) (*Shrinkage Methods*) 
