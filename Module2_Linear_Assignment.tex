@@ -1,0 +1,894 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+  \usepackage{amssymb}
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Module 2 Assignment on Linear Regression - 2 - V1},
+  pdfauthor={Francisco Ambrosini // Undergraduate},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Module 2 Assignment on Linear Regression - 2 - V1}
+\author{Francisco Ambrosini // Undergraduate}
+\date{2/22/2021}
+
+\begin{document}
+\maketitle
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Read and Delete This Part When Typing}
+
+\begin{itemize}
+\tightlist
+\item
+  Give a name to this rmd file:
+  \texttt{ModuleNumber\_ModuleName\_HWSubmission\_FirstName\_LastName}
+  (for example,
+  \texttt{Module0\_Reviews\_HWSubmission\_Yusuf\_Bilgic.rmd}).
+\item
+  First, read the slides, review the notes, and run the lab codes. Then
+  do the assignment, type the solution here. Knit (generate the pdf) the
+  file. Check if it looks good.
+\item
+  \textbf{Especially this Module 2, find a pair, work together, split
+  parts among each of you, explain each other, make sure you understand
+  all pair solutions, combine solutions, and submit separately. It is
+  fine if your codes and results are the same. I expect comments will be
+  your own.}
+\item
+  You will then submit two files to Blackboard:
+
+  \begin{enumerate}
+  \def\labelenumi{\arabic{enumi})}
+  \tightlist
+  \item
+    \texttt{ModuleNumber\_ModuleName\_HWSubmission\_FirstName\_LastName.pdf}
+    and
+  \item
+    \texttt{ModuleNumber\_ModuleName\_HWSubmission\_FirstName\_LastName.rmd}.
+  \end{enumerate}
+\item
+  Grading will be based on the pdf file uploaded (avoid uploading extra
+  docs). Make it easy and readable. Grader or me may take a look at the
+  rmd file.
+\item
+  Unless otherwise specified, use a 5\% level for statistical
+  significance.
+\item
+  Always include your comments on results: don't just leave the numbers
+  without explanations. Use full sentences, structured paragraphs if
+  needed, correct grammar, and proofreading.
+\item
+  Don't include irrelevant and uncommented outputs. Don't include all
+  codes: use
+  \texttt{echo=False,\ results=\textquotesingle{}hide\textquotesingle{}}
+  for most of time. You can include the codes when your solution becomes
+  easier to follow. Also, include useful results. Try to call the
+  outputs from \('r~xyz'\).
+\item
+  Show your knowledge with detailed work in \texttt{consistency} with
+  course materials though tons of other ways may exist.
+\item
+  Each part is 1 pt, so the the total is 20 pt (4 pt is baseline score).
+  If the response is not full or not reflecting the correct answer as
+  expected, you may still earn 0.5 or just get 0.0 pt.~Your TA will
+  grade your work. Any questions, you can write directly to your TA and
+  cc me. Visit my office hours on TWR. Thanks!
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\newpage{}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{module-assignment-questions}{%
+\subsection{Module Assignment
+Questions}\label{module-assignment-questions}}
+
+In this assignment, you will use the \texttt{Auto} data set with \(7\)
+variables (one response \texttt{mpg} and six numerical) and \(n=392\)
+vehicles. For sake of simplicity, categorical variables were excluded.
+Before each randomization used, use \texttt{set.seed(99)} so the test
+results are comparable.
+
+\hypertarget{q1-forward-and-backward-selection}{%
+\subsection{\texorpdfstring{Q1) (\emph{Forward and Backward
+Selection})}{Q1) (Forward and Backward Selection)}}\label{q1-forward-and-backward-selection}}
+
+In \texttt{Module\ 1\ Assignment}, \texttt{Q2}, you fitted
+\texttt{Model\ 3} with \texttt{mpg} as the response and the six
+numerical variables as predictors. This question involves the use of
+\texttt{forward} and \texttt{backward} selection methods on the same
+data set.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Using \texttt{OLS}, fit the model with all predictors on \texttt{mpg}.
+  Report the predictors' coefficient estimates, \(R_{adj}\), and
+  \(MSE\). Note: The method in \texttt{lm()} is called ordinary least
+  squares (OLS).
+\end{enumerate}
+
+Predictors' coefficient estimates found in regression summary below.
+R(adj) --\textgreater{} 0.8063 MSE --\textgreater{}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#This is setup to start}
+\FunctionTok{library}\NormalTok{(ISLR)}
+\NormalTok{Model\_3 }\OtherTok{=}\NormalTok{ mpg }\SpecialCharTok{\textasciitilde{}}\NormalTok{ horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration}
+\NormalTok{Model\_3.fit }\OtherTok{=} \FunctionTok{lm}\NormalTok{(Model\_3, }\AttributeTok{data=}\NormalTok{Auto)}
+
+\NormalTok{train.mat}\OtherTok{=}\FunctionTok{model.matrix}\NormalTok{(mpg }\SpecialCharTok{\textasciitilde{}}\NormalTok{ horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration, }\AttributeTok{data=}\NormalTok{Auto)}
+
+\NormalTok{coefi}\OtherTok{=}\FunctionTok{coef}\NormalTok{(Model\_3.fit,}\AttributeTok{id=}\NormalTok{i)}
+\NormalTok{yhat}\OtherTok{=}\NormalTok{train.mat[,}\FunctionTok{names}\NormalTok{(coefi)]}\SpecialCharTok{\%*\%}\NormalTok{coefi}
+\NormalTok{train.error}\OtherTok{=}\FunctionTok{mean}\NormalTok{((Auto}\SpecialCharTok{$}\NormalTok{mpg}\SpecialCharTok{{-}}\NormalTok{yhat)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{train.error }\CommentTok{\#MSE 11.59017}
+\NormalTok{adj\_r2 }\OtherTok{=} \FunctionTok{summary}\NormalTok{(Model\_3.fit)}\SpecialCharTok{$}\NormalTok{adj.r.squared}
+\FunctionTok{summary}\NormalTok{(Model\_3.fit)}
+\ErrorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Using \texttt{forward\ selection\ method} from \texttt{regsubsets()}
+  and \texttt{method="forward"}, fit MLR models and select the
+  \texttt{best} subset of predictors. Report the best model obtained
+  from the default setting by including the predictors' coefficient
+  estimates, \(R_{adj}\), and \(MSE\).
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# helpful code from the r lab: review it}
+\FunctionTok{library}\NormalTok{(leaps)}
+\NormalTok{Model\_Full }\OtherTok{=}\NormalTok{ mpg }\SpecialCharTok{\textasciitilde{}}\NormalTok{ horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration}\SpecialCharTok{+}\NormalTok{origin}
+\NormalTok{regfit.m1}\OtherTok{=}\FunctionTok{regsubsets}\NormalTok{(Model\_Full, }\AttributeTok{data=}\NormalTok{Auto, }\AttributeTok{nbest=}\DecValTok{1}\NormalTok{, }
+                     \AttributeTok{nvmax=}\DecValTok{6}\NormalTok{, }\AttributeTok{method=}\StringTok{"forward"}\NormalTok{)}
+\NormalTok{reg.summary}\OtherTok{=}\FunctionTok{summary}\NormalTok{(regfit.m1)}
+\NormalTok{reg.summary}
+\FunctionTok{names}\NormalTok{(reg.summary)}
+\NormalTok{reg.summary}\SpecialCharTok{$}\NormalTok{adjr2[}\DecValTok{6}\NormalTok{] }\CommentTok{\#best model adjusted R squared 0.8183822}
+\FunctionTok{coef}\NormalTok{(regfit.m1, }\DecValTok{6}\NormalTok{) }\CommentTok{\#best model coefficients}
+
+\NormalTok{train.mat}\OtherTok{=}\FunctionTok{model.matrix}\NormalTok{(mpg}\SpecialCharTok{\textasciitilde{}}\NormalTok{horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration}\SpecialCharTok{+}\NormalTok{origin, }\AttributeTok{data=}\NormalTok{Auto)}
+\NormalTok{train.errors}\OtherTok{=}\FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{,}\DecValTok{6}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{)\{}
+\NormalTok{  coefi}\OtherTok{=}\FunctionTok{coef}\NormalTok{(regfit.m1,}\AttributeTok{id=}\NormalTok{i)}
+\NormalTok{  yhat}\OtherTok{=}\NormalTok{train.mat[,}\FunctionTok{names}\NormalTok{(coefi)]}\SpecialCharTok{\%*\%}\NormalTok{coefi}
+\NormalTok{  train.errors[i]}\OtherTok{=}\FunctionTok{mean}\NormalTok{((Auto}\SpecialCharTok{$}\NormalTok{mpg}\SpecialCharTok{{-}}\NormalTok{yhat)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\CommentTok{\#this gets train MSE}
+\NormalTok{\}}
+\NormalTok{train.errors[}\DecValTok{6}\NormalTok{] }\CommentTok{\#model with highest adjusted R\^{}2 has lowest MSE 10.86625}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  What criterion had been employed to find the best subset? What other
+  criteria exist? Explain.
+\end{enumerate}
+
+When choosing the forward method, the algorithm automatically chooses
+the model with 1 variable that has the highest R squared (adjusted R
+squared would give the same result because we are comparing models with
+the same number of predictors), then we choose the model with two
+variables which includes the chosen variable from the first step. The
+same is done for the third, including the two previous variables, and so
+forth. There is also the backward method, in which we start with the
+full model and we remove one variable at a time.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Using \texttt{backward\ selection\ method} from \texttt{regsubsets()}
+  and \texttt{method="backward"}, fit MLR models and select the
+  \texttt{best} subset of predictors. Report the best model obtained
+  from the default setting by including predictors, their coefficient
+  estimates, \(R_{adj}\), and \(MSE\).
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# helpful code from the r lab: review it}
+\FunctionTok{library}\NormalTok{(leaps)}
+\NormalTok{Model\_Full2 }\OtherTok{=}\NormalTok{ mpg }\SpecialCharTok{\textasciitilde{}}\NormalTok{ horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration}\SpecialCharTok{+}\NormalTok{origin}
+\NormalTok{regfit.m2}\OtherTok{=}\FunctionTok{regsubsets}\NormalTok{(Model\_Full2, }\AttributeTok{data=}\NormalTok{Auto, }\AttributeTok{nbest=}\DecValTok{1}\NormalTok{, }
+                     \AttributeTok{nvmax=}\DecValTok{6}\NormalTok{, }\AttributeTok{method=}\StringTok{"backward"}\NormalTok{)}
+\NormalTok{reg.summary1}\OtherTok{=}\FunctionTok{summary}\NormalTok{(regfit.m2)}
+\NormalTok{reg.summary1}
+\FunctionTok{names}\NormalTok{(reg.summary1)}
+\NormalTok{reg.summary1}\SpecialCharTok{$}\NormalTok{adjr2[}\DecValTok{6}\NormalTok{] }\CommentTok{\#best model adjusted R squared 0.8183822}
+\FunctionTok{coef}\NormalTok{(regfit.m2, }\DecValTok{6}\NormalTok{) }\CommentTok{\#best model coefficients}
+
+\NormalTok{train.mat1}\OtherTok{=}\FunctionTok{model.matrix}\NormalTok{(mpg}\SpecialCharTok{\textasciitilde{}}\NormalTok{horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration}\SpecialCharTok{+}\NormalTok{origin, }\AttributeTok{data=}\NormalTok{Auto)}
+\NormalTok{train.errors1}\OtherTok{=}\FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{,}\DecValTok{6}\NormalTok{)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{)\{}
+\NormalTok{  coefi}\OtherTok{=}\FunctionTok{coef}\NormalTok{(regfit.m2,}\AttributeTok{id=}\NormalTok{i)}
+\NormalTok{  yhat1}\OtherTok{=}\NormalTok{train.mat[,}\FunctionTok{names}\NormalTok{(coefi)]}\SpecialCharTok{\%*\%}\NormalTok{coefi}
+\NormalTok{  train.errors1[i]}\OtherTok{=}\FunctionTok{mean}\NormalTok{((Auto}\SpecialCharTok{$}\NormalTok{mpg}\SpecialCharTok{{-}}\NormalTok{yhat1)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\CommentTok{\#this gets train MSE}
+\NormalTok{\}}
+\NormalTok{train.errors1[}\DecValTok{6}\NormalTok{] }\CommentTok{\#model with highest adjusted R\^{}2 has lowest MSE 10.86625}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  Compare the results obtained from \texttt{OLS}, \texttt{forward} and
+  \texttt{backward} selection methods (parts a, b and d): What changed?
+  Which one(s) is better? Comment and justify.
+\end{enumerate}
+
+For parts b and d I obtained the same result as best model, which is not
+uncommon because the algorithms employed are very similar. The OLS
+method underperformed in terms of adjusted R squared and MSE when
+compared to the forward and backward method best model, which provides
+me with experience that employing these tools can lead to achieving
+better results when performing statistical analysis in the future.
+
+\hypertarget{q2-cross-validated-with-k-fold}{%
+\subsection{\texorpdfstring{Q2) (\emph{Cross-Validated with
+k-Fold})}{Q2) (Cross-Validated with k-Fold)}}\label{q2-cross-validated-with-k-fold}}
+
+What changes in model selection results and the coefficient estimates
+when cross-validated set approach is employed? Specifically, we will use
+\(k\)-fold cross-validation (\texttt{k-fold\ CV}) here.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Using the \(5\)-fold CV approach, fit the OLS MLR model on
+  \texttt{mpg} including all the predictors. Report the all predictors'
+  coefficient estimates, \(MSE_{train}\), and \(MSE_{test}\).
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{k}\OtherTok{=}\DecValTok{5}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{12}\NormalTok{)}
+
+\CommentTok{\#train MSE}
+\NormalTok{folds}\OtherTok{=}\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{k,}\FunctionTok{nrow}\NormalTok{(Auto),}\AttributeTok{replace=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{cv.errors}\OtherTok{=}\FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{,k)}
+\NormalTok{Model\_4 }\OtherTok{=}\NormalTok{ mpg }\SpecialCharTok{\textasciitilde{}}\NormalTok{ horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration}
+\ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{k)\{}
+\NormalTok{  Model\_4.fit }\OtherTok{=} \FunctionTok{lm}\NormalTok{(Model\_4, }\AttributeTok{data=}\NormalTok{Auto[folds}\SpecialCharTok{!=}\NormalTok{j,])}
+\NormalTok{  pred}\OtherTok{=}\FunctionTok{predict}\NormalTok{(Model\_4.fit,Auto[folds}\SpecialCharTok{!=}\NormalTok{j,])}
+\NormalTok{  cv.errors[j]}\OtherTok{=}\FunctionTok{mean}\NormalTok{((Auto}\SpecialCharTok{$}\NormalTok{mpg[folds}\SpecialCharTok{!=}\NormalTok{j]}\SpecialCharTok{{-}}\NormalTok{pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{\}}
+\FunctionTok{mean}\NormalTok{(cv.errors) }\CommentTok{\#average train MSE 11.55001}
+
+\CommentTok{\#test MSE}
+\NormalTok{folds}\OtherTok{=}\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{k,}\FunctionTok{nrow}\NormalTok{(Auto),}\AttributeTok{replace=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{cv.errors}\OtherTok{=}\FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{,k)}
+\NormalTok{Model\_4 }\OtherTok{=}\NormalTok{ mpg }\SpecialCharTok{\textasciitilde{}}\NormalTok{ horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration}
+\ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{k)\{}
+\NormalTok{  Model\_4.fit }\OtherTok{=} \FunctionTok{lm}\NormalTok{(Model\_4, }\AttributeTok{data=}\NormalTok{Auto[folds}\SpecialCharTok{!=}\NormalTok{j,])}
+\NormalTok{  pred}\OtherTok{=}\FunctionTok{predict}\NormalTok{(Model\_4.fit,Auto[folds}\SpecialCharTok{==}\NormalTok{j,])}
+\NormalTok{  cv.errors[j]}\OtherTok{=}\FunctionTok{mean}\NormalTok{((Auto}\SpecialCharTok{$}\NormalTok{mpg[folds}\SpecialCharTok{==}\NormalTok{j]}\SpecialCharTok{{-}}\NormalTok{pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{\}}
+\FunctionTok{mean}\NormalTok{(cv.errors) }\CommentTok{\#average test MSE 12.26308}
+\FunctionTok{summary}\NormalTok{(Model\_4.fit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Using the \(5\)-fold CV approach and
+  \texttt{forward\ selection\ method}, fit MLR models on \texttt{mpg}
+  and select the \texttt{best} subset of predictors. Report the best
+  model obtained from the default setting by including the predictors'
+  coefficient estimates, the averaged \(MSE_{train}\), and the averaged
+  \(MSE_{test}\).
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{k}\OtherTok{=}\DecValTok{5}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{12}\NormalTok{)}
+
+\CommentTok{\#train MSE}
+\NormalTok{folds}\OtherTok{=}\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{k,}\FunctionTok{nrow}\NormalTok{(Auto),}\AttributeTok{replace=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{cv.errors}\OtherTok{=}\FunctionTok{matrix}\NormalTok{(}\ConstantTok{NA}\NormalTok{,k,}\DecValTok{6}\NormalTok{, }\AttributeTok{dimnames=}\FunctionTok{list}\NormalTok{(}\ConstantTok{NULL}\NormalTok{, }\FunctionTok{paste}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{)))}
+\NormalTok{Full\_Model }\OtherTok{=}\NormalTok{ mpg }\SpecialCharTok{\textasciitilde{}}\NormalTok{ horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration}\SpecialCharTok{+}\NormalTok{origin}
+\ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{k)\{}
+\NormalTok{  regfit.m2}\OtherTok{=}\FunctionTok{regsubsets}\NormalTok{(Full\_Model, }\AttributeTok{data=}\NormalTok{Auto[folds}\SpecialCharTok{!=}\NormalTok{j,], }\AttributeTok{nbest=}\DecValTok{1}\NormalTok{, }
+                     \AttributeTok{nvmax=}\DecValTok{6}\NormalTok{, }\AttributeTok{method=}\StringTok{"forward"}\NormalTok{)}
+\NormalTok{  train.mat1}\OtherTok{=}\FunctionTok{model.matrix}\NormalTok{(mpg}\SpecialCharTok{\textasciitilde{}}\NormalTok{horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration}\SpecialCharTok{+}\NormalTok{origin, }\AttributeTok{data=}\NormalTok{Auto[folds}\SpecialCharTok{!=}\NormalTok{j,])}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{)\{}
+\NormalTok{    coefi}\OtherTok{=}\FunctionTok{coef}\NormalTok{(regfit.m2,}\AttributeTok{id=}\NormalTok{i)}
+\NormalTok{    yhat1}\OtherTok{=}\NormalTok{train.mat1[,}\FunctionTok{names}\NormalTok{(coefi)]}\SpecialCharTok{\%*\%}\NormalTok{coefi}
+\NormalTok{    cv.errors[j, i]}\OtherTok{=}\FunctionTok{mean}\NormalTok{((Auto[folds}\SpecialCharTok{!=}\NormalTok{j,]}\SpecialCharTok{$}\NormalTok{mpg}\SpecialCharTok{{-}}\NormalTok{yhat1)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{  \}}
+\NormalTok{\}}
+\NormalTok{mean.cv.errors}\OtherTok{=}\FunctionTok{apply}\NormalTok{(cv.errors,}\DecValTok{2}\NormalTok{,mean)}
+\NormalTok{mean.cv.errors }\CommentTok{\#best model train MSE (p=6) 10.83093}
+
+\CommentTok{\#test MSE}
+\NormalTok{cv.errors}\OtherTok{=}\FunctionTok{matrix}\NormalTok{(}\ConstantTok{NA}\NormalTok{,k,}\DecValTok{6}\NormalTok{, }\AttributeTok{dimnames=}\FunctionTok{list}\NormalTok{(}\ConstantTok{NULL}\NormalTok{, }\FunctionTok{paste}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{)))}
+\NormalTok{Full\_Model }\OtherTok{=}\NormalTok{ mpg }\SpecialCharTok{\textasciitilde{}}\NormalTok{ horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration}\SpecialCharTok{+}\NormalTok{origin}
+\ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{k)\{}
+\NormalTok{  regfit.m2}\OtherTok{=}\FunctionTok{regsubsets}\NormalTok{(Full\_Model, }\AttributeTok{data=}\NormalTok{Auto[folds}\SpecialCharTok{!=}\NormalTok{j,], }\AttributeTok{nbest=}\DecValTok{1}\NormalTok{, }
+                     \AttributeTok{nvmax=}\DecValTok{6}\NormalTok{, }\AttributeTok{method=}\StringTok{"forward"}\NormalTok{)}
+\NormalTok{  train.mat1}\OtherTok{=}\FunctionTok{model.matrix}\NormalTok{(mpg}\SpecialCharTok{\textasciitilde{}}\NormalTok{horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration}\SpecialCharTok{+}\NormalTok{origin, }\AttributeTok{data=}\NormalTok{Auto[folds}\SpecialCharTok{==}\NormalTok{j,])}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{)\{}
+\NormalTok{    coefi}\OtherTok{=}\FunctionTok{coef}\NormalTok{(regfit.m2,}\AttributeTok{id=}\NormalTok{i)}
+\NormalTok{    yhat1}\OtherTok{=}\NormalTok{train.mat1[,}\FunctionTok{names}\NormalTok{(coefi)]}\SpecialCharTok{\%*\%}\NormalTok{coefi}
+\NormalTok{    cv.errors[j, i]}\OtherTok{=}\FunctionTok{mean}\NormalTok{((Auto[folds}\SpecialCharTok{==}\NormalTok{j,]}\SpecialCharTok{$}\NormalTok{mpg}\SpecialCharTok{{-}}\NormalTok{yhat1)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{  \}}
+\NormalTok{\}}
+\NormalTok{mean.cv.errors}\OtherTok{=}\FunctionTok{apply}\NormalTok{(cv.errors,}\DecValTok{2}\NormalTok{,mean)}
+\NormalTok{mean.cv.errors }\CommentTok{\#best model train MSE (p=3) 11.41013}
+
+\FunctionTok{coef}\NormalTok{(regfit.m2, }\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Compare the \(MSE_{test}\)'s. Explain.
+\end{enumerate}
+
+For the normal OLS with 5-fold CV, we obtained a test MSE of 12.26308,
+considerably higher than that obtained for the optimal model in 5-fold
+CV forward selection, which had a test MSE of 11.41013. This makes
+sense, since in the initial full model we are not even attempting to
+come up with a better model, which is exactly what is accomplished
+through the algorithm of forward selection, which arrives at an optimal
+number of predictors p=3.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Using the \(5\)-fold CV approach and
+  \texttt{backward\ selection\ method}, fit MLR models on \texttt{mpg}
+  and select the \texttt{best} subset of predictors. Report the best
+  model obtained from the default setting by including the predictors'
+  coefficient estimates, the averaged \(MSE_{train}\), \(MSE_{test}\).
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{k}\OtherTok{=}\DecValTok{5}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{12}\NormalTok{)}
+
+\CommentTok{\#train MSE}
+\NormalTok{folds}\OtherTok{=}\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{k,}\FunctionTok{nrow}\NormalTok{(Auto),}\AttributeTok{replace=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{cv.errors}\OtherTok{=}\FunctionTok{matrix}\NormalTok{(}\ConstantTok{NA}\NormalTok{,k,}\DecValTok{7}\NormalTok{, }\AttributeTok{dimnames=}\FunctionTok{list}\NormalTok{(}\ConstantTok{NULL}\NormalTok{, }\FunctionTok{paste}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{7}\NormalTok{)))}
+\NormalTok{Full\_Model }\OtherTok{=}\NormalTok{ mpg }\SpecialCharTok{\textasciitilde{}}\NormalTok{ horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration}\SpecialCharTok{+}\NormalTok{origin}
+\ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{k)\{}
+\NormalTok{  regfit.m2}\OtherTok{=}\FunctionTok{regsubsets}\NormalTok{(Full\_Model, }\AttributeTok{data=}\NormalTok{Auto[folds}\SpecialCharTok{!=}\NormalTok{j,], }\AttributeTok{nbest=}\DecValTok{1}\NormalTok{, }
+                     \AttributeTok{nvmax=}\DecValTok{7}\NormalTok{, }\AttributeTok{method=}\StringTok{"backward"}\NormalTok{)}
+\NormalTok{  train.mat1}\OtherTok{=}\FunctionTok{model.matrix}\NormalTok{(mpg}\SpecialCharTok{\textasciitilde{}}\NormalTok{horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration}\SpecialCharTok{+}\NormalTok{origin, }\AttributeTok{data=}\NormalTok{Auto[folds}\SpecialCharTok{!=}\NormalTok{j,])}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{7}\NormalTok{)\{}
+\NormalTok{    coefi}\OtherTok{=}\FunctionTok{coef}\NormalTok{(regfit.m2,}\AttributeTok{id=}\NormalTok{i)}
+\NormalTok{    yhat1}\OtherTok{=}\NormalTok{train.mat1[,}\FunctionTok{names}\NormalTok{(coefi)]}\SpecialCharTok{\%*\%}\NormalTok{coefi}
+\NormalTok{    cv.errors[j, i]}\OtherTok{=}\FunctionTok{mean}\NormalTok{((Auto[folds}\SpecialCharTok{!=}\NormalTok{j,]}\SpecialCharTok{$}\NormalTok{mpg}\SpecialCharTok{{-}}\NormalTok{yhat1)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{  \}}
+\NormalTok{\}}
+\NormalTok{mean.cv.errors}\OtherTok{=}\FunctionTok{apply}\NormalTok{(cv.errors,}\DecValTok{2}\NormalTok{,mean)}
+\NormalTok{mean.cv.errors }\CommentTok{\#best model train MSE (p=7) 10.80047}
+
+\CommentTok{\#test MSE}
+\NormalTok{cv.errors}\OtherTok{=}\FunctionTok{matrix}\NormalTok{(}\ConstantTok{NA}\NormalTok{,k,}\DecValTok{7}\NormalTok{, }\AttributeTok{dimnames=}\FunctionTok{list}\NormalTok{(}\ConstantTok{NULL}\NormalTok{, }\FunctionTok{paste}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{7}\NormalTok{)))}
+\NormalTok{Full\_Model }\OtherTok{=}\NormalTok{ mpg }\SpecialCharTok{\textasciitilde{}}\NormalTok{ horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration}\SpecialCharTok{+}\NormalTok{origin}
+\ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{k)\{}
+\NormalTok{  regfit.m2}\OtherTok{=}\FunctionTok{regsubsets}\NormalTok{(Full\_Model, }\AttributeTok{data=}\NormalTok{Auto[folds}\SpecialCharTok{!=}\NormalTok{j,], }\AttributeTok{nbest=}\DecValTok{1}\NormalTok{, }
+                     \AttributeTok{nvmax=}\DecValTok{7}\NormalTok{, }\AttributeTok{method=}\StringTok{"backward"}\NormalTok{)}
+\NormalTok{  train.mat1}\OtherTok{=}\FunctionTok{model.matrix}\NormalTok{(mpg}\SpecialCharTok{\textasciitilde{}}\NormalTok{horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration}\SpecialCharTok{+}\NormalTok{origin, }\AttributeTok{data=}\NormalTok{Auto[folds}\SpecialCharTok{==}\NormalTok{j,])}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{7}\NormalTok{)\{}
+\NormalTok{    coefi}\OtherTok{=}\FunctionTok{coef}\NormalTok{(regfit.m2,}\AttributeTok{id=}\NormalTok{i)}
+\NormalTok{    yhat1}\OtherTok{=}\NormalTok{train.mat1[,}\FunctionTok{names}\NormalTok{(coefi)]}\SpecialCharTok{\%*\%}\NormalTok{coefi}
+\NormalTok{    cv.errors[j, i]}\OtherTok{=}\FunctionTok{mean}\NormalTok{((Auto[folds}\SpecialCharTok{==}\NormalTok{j,]}\SpecialCharTok{$}\NormalTok{mpg}\SpecialCharTok{{-}}\NormalTok{yhat1)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{  \}}
+\NormalTok{\}}
+\NormalTok{mean.cv.errors}\OtherTok{=}\FunctionTok{apply}\NormalTok{(cv.errors,}\DecValTok{2}\NormalTok{,mean)}
+\NormalTok{mean.cv.errors }\CommentTok{\#best model train MSE (p=6) 11.36236}
+\FunctionTok{coef}\NormalTok{(regfit.m2, }\DecValTok{6}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  Did you come up with a different model on parts b and d? Are the
+  predictors and their coefficient estimates same? Compare and explain.
+\end{enumerate}
+
+Yes, forward selection in part b determined that the model with p=3 was
+the optimal one, whereas backward selection in part d ended with p=6 for
+the optimal one. This helps realize the differences between the two
+approaches, because, although they help in speeding up the algorithm to
+find the optimal mode, however, it is not guaranteed that either model
+found the absolute optimal solution.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  Which fitted model is better among parts a, b, and d? Why? Justify.
+\end{enumerate}
+
+If we take the test MSE as an estimate of test error, we would have to
+conclude that the model with p=3 determined by 5-fold CV backward
+selection is the best model, as it has the lowest test MSE estimate.
+This means that this model performs better than all the rest when
+testing the predictions obtained from said model. If we employed the
+``exhaustive'' method of subset selection, we might have arrived at a
+different optimal model than the 3-predictor model found in d.~
+
+\hypertarget{q3-shrinkage-methods}{%
+\subsection{\texorpdfstring{Q3) (\emph{Shrinkage
+Methods})}{Q3) (Shrinkage Methods)}}\label{q3-shrinkage-methods}}
+
+Results for \texttt{OLS}, \texttt{lasso}, and \texttt{ridge} regression
+methods can be comparable. Now, you are expected to observe that ridge
+and lasso regression methods may reduce some coefficients to zero (so in
+this way, these features are eliminated) and shrink coefficients of
+other variables to low values.
+
+In this exercise, you will analyze theses estimation and prediction
+methods (OLS, ridge, lasso) on the \texttt{mpg} in the Auto data set
+using \(k-fold\) cross-validation test approach.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Fit a ridge regression model on the entire data set (including all six
+  predictors, don't use yet any validation approach), with the optimal
+  \(\lambda\) chosen by \texttt{cv.glmnet()}. Report \(\hat \lambda\),
+  the predictors' coefficient estimates, and \(MSE\).
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(glmnet)}
+\NormalTok{Auto1 }\OtherTok{=} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{scale}\NormalTok{(Auto[,}\DecValTok{1}\SpecialCharTok{:}\DecValTok{7}\NormalTok{]))}
+\NormalTok{x}\OtherTok{=}\FunctionTok{model.matrix}\NormalTok{(mpg}\SpecialCharTok{\textasciitilde{}}\NormalTok{horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration,Auto1)}
+\NormalTok{y}\OtherTok{=}\NormalTok{mpg}
+\NormalTok{grid}\OtherTok{=}\DecValTok{10}\SpecialCharTok{\^{}}\FunctionTok{seq}\NormalTok{(}\DecValTok{10}\NormalTok{,}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{,}\AttributeTok{length=}\DecValTok{100}\NormalTok{)}
+\NormalTok{ridge.mod}\OtherTok{=}\FunctionTok{cv.glmnet}\NormalTok{(x,y,}\AttributeTok{alpha=}\DecValTok{0}\NormalTok{,}\AttributeTok{lambda=}\NormalTok{grid)}
+\NormalTok{bestlam}\OtherTok{=}\NormalTok{ridge.mod}\SpecialCharTok{$}\NormalTok{lambda.min}
+\NormalTok{ridge.mod}\SpecialCharTok{$}\NormalTok{lambda[}\DecValTok{100}\NormalTok{] }\CommentTok{\#0.01 value of best lanmbda, index=100}
+\NormalTok{ridge.mod1}\OtherTok{=}\FunctionTok{glmnet}\NormalTok{(x,y,}\AttributeTok{alpha=}\DecValTok{0}\NormalTok{,}\AttributeTok{lambda=}\NormalTok{grid)}
+\FunctionTok{coef}\NormalTok{(ridge.mod)}
+
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{99}\NormalTok{)}
+\NormalTok{train}\OtherTok{=}\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(x), }\FunctionTok{nrow}\NormalTok{(x)}\SpecialCharTok{/}\DecValTok{2}\NormalTok{)}
+\NormalTok{test}\OtherTok{=}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{train)}
+\NormalTok{y.test}\OtherTok{=}\NormalTok{y[test]}
+\NormalTok{ridge.mod}\OtherTok{=}\FunctionTok{glmnet}\NormalTok{(x[train,],y[train],}\AttributeTok{alpha=}\DecValTok{0}\NormalTok{,}\AttributeTok{lambda=}\NormalTok{grid, }\AttributeTok{thresh=}\FloatTok{1e{-}12}\NormalTok{)}
+
+\NormalTok{ridge.pred}\OtherTok{=}\FunctionTok{predict}\NormalTok{(ridge.mod,}\AttributeTok{s=}\NormalTok{bestlam,}\AttributeTok{newx=}\NormalTok{x[test,])}
+\FunctionTok{mean}\NormalTok{((ridge.pred}\SpecialCharTok{{-}}\NormalTok{y.test)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\CommentTok{\#test MSE 0.2105556}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Fit a lasso regression model on the entire data set (including all six
+  predictors, don't use yet any validation approach), with the optimal
+  \(\lambda\) chosen by \texttt{cv.glmnet()}. Report \(\hat \lambda\),
+  the predictors' coefficient estimates, and \(MSE\).
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(glmnet)}
+\NormalTok{Auto1 }\OtherTok{=} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{scale}\NormalTok{(Auto[,}\DecValTok{1}\SpecialCharTok{:}\DecValTok{7}\NormalTok{]))}
+\NormalTok{x}\OtherTok{=}\FunctionTok{model.matrix}\NormalTok{(mpg}\SpecialCharTok{\textasciitilde{}}\NormalTok{horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration,Auto1)}
+\NormalTok{y}\OtherTok{=}\NormalTok{mpg}
+\NormalTok{grid}\OtherTok{=}\DecValTok{10}\SpecialCharTok{\^{}}\FunctionTok{seq}\NormalTok{(}\DecValTok{10}\NormalTok{,}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{,}\AttributeTok{length=}\DecValTok{100}\NormalTok{)}
+\NormalTok{lasso.mod}\OtherTok{=}\FunctionTok{cv.glmnet}\NormalTok{(x,y,}\AttributeTok{alpha=}\DecValTok{1}\NormalTok{,}\AttributeTok{lambda=}\NormalTok{grid)}
+\NormalTok{bestlam}\OtherTok{=}\NormalTok{lasso.mod}\SpecialCharTok{$}\NormalTok{lambda.min}
+\NormalTok{lasso.mod}\SpecialCharTok{$}\NormalTok{lambda[}\DecValTok{100}\NormalTok{] }\CommentTok{\#0.01 value of best lanmbda, index=100}
+\NormalTok{lasso.mod}
+\FunctionTok{coef}\NormalTok{(lasso.mod)}
+
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{99}\NormalTok{)}
+\NormalTok{train}\OtherTok{=}\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(x), }\FunctionTok{nrow}\NormalTok{(x)}\SpecialCharTok{/}\DecValTok{2}\NormalTok{)}
+\NormalTok{test}\OtherTok{=}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{train)}
+\NormalTok{y.test}\OtherTok{=}\NormalTok{y[test]}
+\NormalTok{lasso.mod}\OtherTok{=}\FunctionTok{glmnet}\NormalTok{(x[train,],y[train],}\AttributeTok{alpha=}\DecValTok{1}\NormalTok{,}\AttributeTok{lambda=}\NormalTok{grid, }\AttributeTok{thresh=}\FloatTok{1e{-}12}\NormalTok{)}
+
+\NormalTok{lasso.pred}\OtherTok{=}\FunctionTok{predict}\NormalTok{(lasso.mod,}\AttributeTok{s=}\NormalTok{bestlam,}\AttributeTok{newx=}\NormalTok{x[test,])}
+\FunctionTok{mean}\NormalTok{((lasso.pred}\SpecialCharTok{{-}}\NormalTok{y.test)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\CommentTok{\#test MSE 0.2051557}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Compare the parts a and b in Q3 to part a in Q1. What changed?
+  Comment.
+\end{enumerate}
+
+In the lasso regression, some of the coefficients were driven to zero
+(displacement \& acceleration), whereas in the ridge regression most
+coefficients adop minute magnitudes. The estimated MSE is lower for the
+lasso regression, which might show in this case that suppressing some
+variables might be beneficial.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  How accurately can we predict \texttt{mpg}? Using the three methods
+  (OLS, ridge and lasso) with all predictors, you will fit and test
+  using \(5\)-fold cross-validation approach with the optimal
+  \(\lambda\) chosen by \texttt{cv.glmnet()}. For each, report the
+  averaged train and test errors (\(MSE_{train}\), \(MSE_{test}\)):
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{k}\OtherTok{=}\DecValTok{5}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{12}\NormalTok{)}
+
+\CommentTok{\#OLS Model}
+\CommentTok{\#train MSE}
+\NormalTok{folds}\OtherTok{=}\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{k,}\FunctionTok{nrow}\NormalTok{(Auto),}\AttributeTok{replace=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{cv.errors}\OtherTok{=}\FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{,k)}
+\NormalTok{Model\_4 }\OtherTok{=}\NormalTok{ mpg }\SpecialCharTok{\textasciitilde{}}\NormalTok{ horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration}
+\ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{k)\{}
+\NormalTok{  Model\_4.fit }\OtherTok{=} \FunctionTok{lm}\NormalTok{(Model\_4, }\AttributeTok{data=}\NormalTok{Auto[folds}\SpecialCharTok{!=}\NormalTok{j,])}
+\NormalTok{  pred}\OtherTok{=}\FunctionTok{predict}\NormalTok{(Model\_4.fit,Auto[folds}\SpecialCharTok{!=}\NormalTok{j,])}
+\NormalTok{  cv.errors[j]}\OtherTok{=}\FunctionTok{mean}\NormalTok{((Auto}\SpecialCharTok{$}\NormalTok{mpg[folds}\SpecialCharTok{!=}\NormalTok{j]}\SpecialCharTok{{-}}\NormalTok{pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{\}}
+\FunctionTok{mean}\NormalTok{(cv.errors) }\CommentTok{\#average train MSE 11.55001}
+
+\CommentTok{\#test MSE}
+\NormalTok{folds}\OtherTok{=}\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{k,}\FunctionTok{nrow}\NormalTok{(Auto),}\AttributeTok{replace=}\ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{cv.errors}\OtherTok{=}\FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{,k)}
+\NormalTok{Model\_4 }\OtherTok{=}\NormalTok{ mpg }\SpecialCharTok{\textasciitilde{}}\NormalTok{ horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration}
+\ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{k)\{}
+\NormalTok{  Model\_4.fit }\OtherTok{=} \FunctionTok{lm}\NormalTok{(Model\_4, }\AttributeTok{data=}\NormalTok{Auto[folds}\SpecialCharTok{!=}\NormalTok{j,])}
+\NormalTok{  pred}\OtherTok{=}\FunctionTok{predict}\NormalTok{(Model\_4.fit,Auto[folds}\SpecialCharTok{==}\NormalTok{j,])}
+\NormalTok{  cv.errors[j]}\OtherTok{=}\FunctionTok{mean}\NormalTok{((Auto}\SpecialCharTok{$}\NormalTok{mpg[folds}\SpecialCharTok{==}\NormalTok{j]}\SpecialCharTok{{-}}\NormalTok{pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{\}}
+\FunctionTok{mean}\NormalTok{(cv.errors) }\CommentTok{\#average test MSE 12.26308}
+\FunctionTok{summary}\NormalTok{(Model\_4.fit)}
+
+
+\CommentTok{\#Ridge Regression}
+\FunctionTok{library}\NormalTok{(glmnet)}
+\NormalTok{Auto1 }\OtherTok{=} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{scale}\NormalTok{(Auto[,}\DecValTok{1}\SpecialCharTok{:}\DecValTok{7}\NormalTok{]))}
+\NormalTok{x}\OtherTok{=}\FunctionTok{model.matrix}\NormalTok{(mpg}\SpecialCharTok{\textasciitilde{}}\NormalTok{horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration,Auto1)}
+\NormalTok{y}\OtherTok{=}\NormalTok{mpg}
+\NormalTok{grid}\OtherTok{=}\DecValTok{10}\SpecialCharTok{\^{}}\FunctionTok{seq}\NormalTok{(}\DecValTok{10}\NormalTok{,}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{,}\AttributeTok{length=}\DecValTok{100}\NormalTok{)}
+\NormalTok{ridge.mod}\OtherTok{=}\FunctionTok{cv.glmnet}\NormalTok{(x,y,}\AttributeTok{alpha=}\DecValTok{0}\NormalTok{,}\AttributeTok{lambda=}\NormalTok{grid)}
+\NormalTok{bestlam}\OtherTok{=}\NormalTok{ridge.mod}\SpecialCharTok{$}\NormalTok{lambda.min}
+\NormalTok{ridge.mod}\SpecialCharTok{$}\NormalTok{lambda[}\DecValTok{100}\NormalTok{] }\CommentTok{\#0.01 value of best lanmbda, index=100}
+\NormalTok{ridge.mod1}\OtherTok{=}\FunctionTok{glmnet}\NormalTok{(x,y,}\AttributeTok{alpha=}\DecValTok{0}\NormalTok{,}\AttributeTok{lambda=}\NormalTok{grid)}
+\FunctionTok{coef}\NormalTok{(ridge.mod)}
+
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{99}\NormalTok{)}
+\NormalTok{train}\OtherTok{=}\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(x), }\FunctionTok{nrow}\NormalTok{(x)}\SpecialCharTok{/}\DecValTok{2}\NormalTok{)}
+\NormalTok{test}\OtherTok{=}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{train)}
+\NormalTok{y.test}\OtherTok{=}\NormalTok{y[test]}
+\NormalTok{ridge.mod}\OtherTok{=}\FunctionTok{glmnet}\NormalTok{(x[train,],y[train],}\AttributeTok{alpha=}\DecValTok{0}\NormalTok{,}\AttributeTok{lambda=}\NormalTok{grid, }\AttributeTok{thresh=}\FloatTok{1e{-}12}\NormalTok{)}
+
+\NormalTok{ridge.pred}\OtherTok{=}\FunctionTok{predict}\NormalTok{(ridge.mod,}\AttributeTok{s=}\NormalTok{bestlam,}\AttributeTok{newx=}\NormalTok{x[test,])}
+\FunctionTok{mean}\NormalTok{((ridge.pred}\SpecialCharTok{{-}}\NormalTok{y.test)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\CommentTok{\#test MSE 0.2105556}
+
+
+\CommentTok{\#Lasso Regression}
+\FunctionTok{library}\NormalTok{(glmnet)}
+\NormalTok{Auto1 }\OtherTok{=} \FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{scale}\NormalTok{(Auto[,}\DecValTok{1}\SpecialCharTok{:}\DecValTok{7}\NormalTok{]))}
+\NormalTok{x}\OtherTok{=}\FunctionTok{model.matrix}\NormalTok{(mpg}\SpecialCharTok{\textasciitilde{}}\NormalTok{horsepower}\SpecialCharTok{+}\NormalTok{year}\SpecialCharTok{+}\NormalTok{cylinders}\SpecialCharTok{+}\NormalTok{displacement}\SpecialCharTok{+}\NormalTok{weight}\SpecialCharTok{+}\NormalTok{acceleration,Auto1)}
+\NormalTok{y}\OtherTok{=}\NormalTok{mpg}
+\NormalTok{grid}\OtherTok{=}\DecValTok{10}\SpecialCharTok{\^{}}\FunctionTok{seq}\NormalTok{(}\DecValTok{10}\NormalTok{,}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{,}\AttributeTok{length=}\DecValTok{100}\NormalTok{)}
+\NormalTok{lasso.mod}\OtherTok{=}\FunctionTok{cv.glmnet}\NormalTok{(x,y,}\AttributeTok{alpha=}\DecValTok{1}\NormalTok{,}\AttributeTok{lambda=}\NormalTok{grid)}
+\NormalTok{bestlam}\OtherTok{=}\NormalTok{lasso.mod}\SpecialCharTok{$}\NormalTok{lambda.min}
+\NormalTok{lasso.mod}\SpecialCharTok{$}\NormalTok{lambda[}\DecValTok{100}\NormalTok{] }\CommentTok{\#0.01 value of best lanmbda, index=100}
+\NormalTok{lasso.mod}
+\FunctionTok{coef}\NormalTok{(lasso.mod)}
+
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{99}\NormalTok{)}
+\NormalTok{train}\OtherTok{=}\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(x), }\FunctionTok{nrow}\NormalTok{(x)}\SpecialCharTok{/}\DecValTok{2}\NormalTok{)}
+\NormalTok{test}\OtherTok{=}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{train)}
+\NormalTok{y.test}\OtherTok{=}\NormalTok{y[test]}
+\NormalTok{lasso.mod}\OtherTok{=}\FunctionTok{glmnet}\NormalTok{(x[train,],y[train],}\AttributeTok{alpha=}\DecValTok{1}\NormalTok{,}\AttributeTok{lambda=}\NormalTok{grid, }\AttributeTok{thresh=}\FloatTok{1e{-}12}\NormalTok{)}
+
+\NormalTok{lasso.pred}\OtherTok{=}\FunctionTok{predict}\NormalTok{(lasso.mod,}\AttributeTok{s=}\NormalTok{bestlam,}\AttributeTok{newx=}\NormalTok{x[test,])}
+\FunctionTok{mean}\NormalTok{((lasso.pred}\SpecialCharTok{{-}}\NormalTok{y.test)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\CommentTok{\#test MSE 0.2051557}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Fit a \texttt{ridge} regression model.
+\item
+  Fit a \texttt{lasso} regression model.
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  Write an overall report on part d by addressing the inquiry,
+  \texttt{how\ accurately\ can\ we\ predict\ mpg?}. Is there much
+  difference among the test errors resulting from these three
+  approaches? Show your comprehension.
+\end{enumerate}
+
+Very interestingly, using the Lasso Regression we came upon a solution
+very similar to the one found using forward selection, in which we
+employer fewer predictors. However, in the OLS full model (implied of
+course) and the Ridge regression, all coefficients are nontrivially
+greater than zero, and although Lasso regression exhibited a lower test
+MSE than that of Ridge regression, OLS full model ended up outperforming
+both after performing 5-fold CV.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{5}
+\item
+  (BONUS) Propose a different model (or set of models) that seem to
+  perform well on this data set, and justify your answer.
+\item
+  (BONUS) Include categorical variables to the models you built in part
+  d, Q3. Report.
+\item
+  (GOLDEN BONUS) Propose a model (or set of models) that seem to perform
+  well on this data set, and justify your answer. Make sure that you are
+  evaluating model performance using \(5\)-fold cross-validation
+  approach. You can transform the data, scale and try any methods. When
+  \(MSE_{test}\) is the lowest (under the setting of Q3, part d) in the
+  class, your HW assignment score will be 100\% (20 pts).
+\item
+  (BONUS) You can make a hybrid design in model selection using all the
+  methods here in a way that yields better results. Show your work,
+  justify and obtain better results in part d, Q3.
+\end{enumerate}
+
+\newpage
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{your-solutions}{%
+\subsection{Your Solutions}\label{your-solutions}}
+
+\hypertarget{q1}{%
+\subsection{Q1)}\label{q1}}
+
+Part a:
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Part b:
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Part c:
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Part d:
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Part e:
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\newpage
+
+\hypertarget{q2}{%
+\subsection{Q2)}\label{q2}}
+
+Part a:
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Part b:
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Part c:
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Part d:
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Part e:
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Part f:
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\newpage
+
+\hypertarget{q3}{%
+\subsection{Q3)}\label{q3}}
+
+Part a:
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Part b:
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Part c:
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Part d:
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Part e:
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\newpage
+
+\hypertarget{write-comments-questions}{%
+\subsection{Write comments, questions:
+\ldots{}}\label{write-comments-questions}}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+I hereby write and submit my solutions without violating the academic
+honesty and integrity. If not, I accept the consequences.
+
+\hypertarget{list-the-fiends-you-worked-with-name-last-name}{%
+\subsubsection{List the fiends you worked with (name, last name):
+\ldots{}}\label{list-the-fiends-you-worked-with-name-last-name}}
+
+\hypertarget{disclose-the-resources-or-persons-if-you-get-any-help}{%
+\subsubsection{Disclose the resources or persons if you get any help:
+\ldots{}}\label{disclose-the-resources-or-persons-if-you-get-any-help}}
+
+\hypertarget{how-long-did-the-assignment-work-take}{%
+\subsubsection{How long did the assignment work take?:
+\ldots{}}\label{how-long-did-the-assignment-work-take}}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{references}{%
+\subsection{References}\label{references}}
+
+\ldots{}
+
+\end{document}

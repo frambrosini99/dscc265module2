@@ -270,23 +270,138 @@ a. Fit a ridge regression model on the entire data set (including all six predic
 
 ```{r echo=TRUE, eval=FALSE}
 library(glmnet)
-x=model.matrix(mpg~horsepower+year+cylinders+displacement+weight+acceleration+origin,Auto)[,-1]
+Auto1 = as.data.frame(scale(Auto[,1:7]))
+x=model.matrix(mpg~horsepower+year+cylinders+displacement+weight+acceleration,Auto1)
 y=mpg
 grid=10^seq(10,-2,length=100)
-ridge.mod=glmnet(x,y,alpha=0,lambda=grid)
+ridge.mod=cv.glmnet(x,y,alpha=0,lambda=grid)
+bestlam=ridge.mod$lambda.min
+ridge.mod$lambda[100] #0.01 value of best lanmbda, index=100
+ridge.mod1=glmnet(x,y,alpha=0,lambda=grid)
+coef(ridge.mod)
+
+set.seed(99)
+train=sample(1:nrow(x), nrow(x)/2)
+test=(-train)
+y.test=y[test]
+ridge.mod=glmnet(x[train,],y[train],alpha=0,lambda=grid, thresh=1e-12)
+
+ridge.pred=predict(ridge.mod,s=bestlam,newx=x[test,])
+mean((ridge.pred-y.test)^2) #test MSE 0.2105556
 ```
 
 b. Fit a lasso regression model on the entire data set (including all six predictors, don't use yet any validation approach), with the optimal $\lambda$ chosen by `cv.glmnet()`. Report $\hat \lambda$, the predictors' coefficient estimates, and $MSE$.
 
+```{r echo=TRUE, eval=FALSE}
+
+library(glmnet)
+Auto1 = as.data.frame(scale(Auto[,1:7]))
+x=model.matrix(mpg~horsepower+year+cylinders+displacement+weight+acceleration,Auto1)
+y=mpg
+grid=10^seq(10,-2,length=100)
+lasso.mod=cv.glmnet(x,y,alpha=1,lambda=grid)
+bestlam=lasso.mod$lambda.min
+lasso.mod$lambda[100] #0.01 value of best lanmbda, index=100
+lasso.mod
+coef(lasso.mod)
+
+set.seed(99)
+train=sample(1:nrow(x), nrow(x)/2)
+test=(-train)
+y.test=y[test]
+lasso.mod=glmnet(x[train,],y[train],alpha=1,lambda=grid, thresh=1e-12)
+
+lasso.pred=predict(lasso.mod,s=bestlam,newx=x[test,])
+mean((lasso.pred-y.test)^2) #test MSE 0.2051557
+
+```
+
 c. Compare the parts a and b in Q3 to part a in Q1. What changed? Comment.
+
+In the lasso regression, some of the coefficients were driven to zero (displacement & acceleration), whereas in the ridge regression most coefficients adop minute magnitudes. The estimated MSE is lower for the lasso regression, which might show in this case that suppressing some variables might be beneficial.
 
 d. How accurately can we predict `mpg`? Using the three methods (OLS, ridge and lasso) with all predictors, you will fit and test using $5$-fold cross-validation approach with the optimal $\lambda$ chosen by `cv.glmnet()`. For each, report the averaged train and test errors ($MSE_{train}$, $MSE_{test}$):
 
-   1) Fit an `OLS` model.
+```{r echo=TRUE, eval=FALSE}
+k=5
+set.seed(12)
+
+#OLS Model
+#train MSE
+folds=sample(1:k,nrow(Auto),replace=TRUE)
+cv.errors=rep(NA,k)
+Model_4 = mpg ~ horsepower+year+cylinders+displacement+weight+acceleration
+for(j in 1:k){
+  Model_4.fit = lm(Model_4, data=Auto[folds!=j,])
+  pred=predict(Model_4.fit,Auto[folds!=j,])
+  cv.errors[j]=mean((Auto$mpg[folds!=j]-pred)^2)
+}
+mean(cv.errors) #average train MSE 11.55001
+
+#test MSE
+folds=sample(1:k,nrow(Auto),replace=TRUE)
+cv.errors=rep(NA,k)
+Model_4 = mpg ~ horsepower+year+cylinders+displacement+weight+acceleration
+for(j in 1:k){
+  Model_4.fit = lm(Model_4, data=Auto[folds!=j,])
+  pred=predict(Model_4.fit,Auto[folds==j,])
+  cv.errors[j]=mean((Auto$mpg[folds==j]-pred)^2)
+}
+mean(cv.errors) #average test MSE 12.26308
+summary(Model_4.fit)
+
+
+#Ridge Regression
+library(glmnet)
+Auto1 = as.data.frame(scale(Auto[,1:7]))
+x=model.matrix(mpg~horsepower+year+cylinders+displacement+weight+acceleration,Auto1)
+y=mpg
+grid=10^seq(10,-2,length=100)
+ridge.mod=cv.glmnet(x,y,alpha=0,lambda=grid)
+bestlam=ridge.mod$lambda.min
+ridge.mod$lambda[100] #0.01 value of best lanmbda, index=100
+ridge.mod1=glmnet(x,y,alpha=0,lambda=grid)
+coef(ridge.mod)
+
+set.seed(99)
+train=sample(1:nrow(x), nrow(x)/2)
+test=(-train)
+y.test=y[test]
+ridge.mod=glmnet(x[train,],y[train],alpha=0,lambda=grid, thresh=1e-12)
+
+ridge.pred=predict(ridge.mod,s=bestlam,newx=x[test,])
+mean((ridge.pred-y.test)^2) #test MSE 0.2105556
+
+
+#Lasso Regression
+library(glmnet)
+Auto1 = as.data.frame(scale(Auto[,1:7]))
+x=model.matrix(mpg~horsepower+year+cylinders+displacement+weight+acceleration,Auto1)
+y=mpg
+grid=10^seq(10,-2,length=100)
+lasso.mod=cv.glmnet(x,y,alpha=1,lambda=grid)
+bestlam=lasso.mod$lambda.min
+lasso.mod$lambda[100] #0.01 value of best lanmbda, index=100
+lasso.mod
+coef(lasso.mod)
+
+set.seed(99)
+train=sample(1:nrow(x), nrow(x)/2)
+test=(-train)
+y.test=y[test]
+lasso.mod=glmnet(x[train,],y[train],alpha=1,lambda=grid, thresh=1e-12)
+
+lasso.pred=predict(lasso.mod,s=bestlam,newx=x[test,])
+mean((lasso.pred-y.test)^2) #test MSE 0.2051557
+
+```
+
    2) Fit a `ridge` regression model.
    3) Fit a `lasso` regression model.
 
-e. Write an overall report on part d by addressing the inquiry, `how accurately can we predict mpg?`. Is there much difference among the test errors resulting from these three approaches? Show your comprehension. 
+e. Write an overall report on part d by addressing the inquiry, `how accurately can we predict mpg?`. Is there much difference among the test errors resulting from these three approaches? Show your comprehension.
+
+Very interestingly, using the Lasso Regression we came upon a solution very similar to the one found using forward selection, in which we employer fewer predictors. However, in the OLS full model (implied of course) and the Ridge regression, all coefficients are nontrivially greater than zero, and although Lasso regression exhibited a lower test MSE than that of Ridge regression, OLS full model ended up outperforming both after performing 5-fold CV.
 
 f. (BONUS) Propose a different model (or set of models) that seem to perform well on this data set, and justify your answer.
 
