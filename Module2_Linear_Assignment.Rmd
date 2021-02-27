@@ -257,7 +257,7 @@ Yes, forward selection in part b determined that the model with p=3 was the opti
 
 f. Which fitted model is better among parts a, b, and d? Why? Justify. 
 
-If we take the test MSE as an estimate of test error, we would have to conclude that the model with p=3 determined by 5-fold CV backward selection is the best model, as it has the lowest test MSE estimate. This means that this model performs better than all the rest when testing the predictions obtained from said model.
+If we take the test MSE as an estimate of test error, we would have to conclude that the model with p=3 determined by 5-fold CV backward selection is the best model, as it has the lowest test MSE estimate. This means that this model performs better than all the rest when testing the predictions obtained from said model. If we employed the "exhaustive" method of subset selection, we might have arrived at a different optimal model than the 3-predictor model found in d. 
 
 
 ## Q3) (*Shrinkage Methods*) 
@@ -267,6 +267,14 @@ Results for `OLS`, `lasso`, and `ridge` regression methods can be comparable. No
 In this exercise, you will analyze theses estimation and prediction methods (OLS, ridge, lasso) on the `mpg` in the Auto data set using $k-fold$ cross-validation test approach.
 
 a. Fit a ridge regression model on the entire data set (including all six predictors, don't use yet any validation approach), with the optimal $\lambda$ chosen by `cv.glmnet()`. Report $\hat \lambda$, the predictors' coefficient estimates, and $MSE$.
+
+```{r echo=TRUE, eval=FALSE}
+library(glmnet)
+x=model.matrix(mpg~horsepower+year+cylinders+displacement+weight+acceleration+origin,Auto)[,-1]
+y=mpg
+grid=10^seq(10,-2,length=100)
+ridge.mod=glmnet(x,y,alpha=0,lambda=grid)
+```
 
 b. Fit a lasso regression model on the entire data set (including all six predictors, don't use yet any validation approach), with the optimal $\lambda$ chosen by `cv.glmnet()`. Report $\hat \lambda$, the predictors' coefficient estimates, and $MSE$.
 
